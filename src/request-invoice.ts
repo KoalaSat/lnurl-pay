@@ -19,6 +19,7 @@ export const requestInvoiceWithServiceParams = async ({
   params,
   tokens,
   comment,
+  nostr,
   onionAllowed = false,
   validateInvoice = false,
   fetchGet = getJson,
@@ -31,7 +32,7 @@ export const requestInvoiceWithServiceParams = async ({
   if (!onionAllowed && isOnionUrl(callback))
     throw new Error('Onion requests not allowed')
 
-  const invoiceParams: { amount: number; comment?: string } = {
+  const invoiceParams: { amount: number; comment?: string, nostr?: string } = {
     amount: tokens * 1000,
   }
 
@@ -40,6 +41,7 @@ export const requestInvoiceWithServiceParams = async ({
       `The comment length must be ${commentAllowed} characters or fewer`
     )
   if (comment) invoiceParams.comment = comment
+  if (nostr) invoiceParams.nostr = nostr
 
   const data = await fetchGet({ url: callback, params: invoiceParams })
   const invoice = data && data.pr && data.pr.toString()
@@ -85,6 +87,7 @@ export const requestInvoice = async ({
   lnUrlOrAddress,
   tokens,
   comment,
+  nostr,
   onionAllowed = false,
   validateInvoice = false,
   fetchGet = getJson,
@@ -98,6 +101,7 @@ export const requestInvoice = async ({
     params,
     tokens,
     comment,
+    nostr,
     onionAllowed,
     validateInvoice,
     fetchGet,
